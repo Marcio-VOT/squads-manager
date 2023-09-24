@@ -1,22 +1,17 @@
 import {
-  IsEmail,
+  IsInt,
   IsNotEmpty,
   IsNumberString,
   IsString,
   IsStrongPassword,
   Length,
-} from 'class-validator'
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @Length(3, 120)
-  name: string
-
-  @IsNotEmpty()
-  @IsString()
-  @IsEmail()
-  email: string
+  name: string;
 
   @IsNotEmpty()
   @IsString()
@@ -33,10 +28,14 @@ export class CreateUserDto {
       message: 'password too weak',
     },
   )
-  password: string
+  password: string;
 
   @IsNotEmpty()
   @IsNumberString()
   @Length(11, 11)
-  cpf: string
+  cpf: string;
+
+  @IsNotEmpty()
+  @IsInt()
+  team_id: number;
 }

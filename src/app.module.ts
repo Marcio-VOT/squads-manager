@@ -6,8 +6,15 @@ import { ProcessModule } from './modules/process/process.module';
 import { SubprocessModule } from './modules/subprocess/subprocess.module';
 
 @Module({
-  imports: [UserModule, AreaModule, MethodModule, ProcessModule, SubprocessModule],
+  imports: [
+    UserModule,
+    AreaModule,
+    MethodModule,
+    ProcessModule,
+    SubprocessModule,
+  ],
   controllers: [],
   providers: [],
 })
+// eslint-disable-next-line prettier/prettier
 export class AppModule { }

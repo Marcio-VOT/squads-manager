@@ -3,40 +3,37 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthSignInDTO } from './dto/auth-signin.dto';
-import { UsersService } from '../users/users.service';
-import { AuthSignUpDTO } from './dto/auth-signup.dto';
 import * as bcrypt from 'bcrypt';
-import {
-  ReturnCreateUser,
-  UsersRepository,
-} from '../users/repository/user.repository';
 import { JwtService } from '@nestjs/jwt';
+import { AuthSignUpDto } from './dto/auth-signup.dto';
+import { AuthSignInDto } from './dto/auth-signin.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   private AUDIENCE = 'users';
   private ISSUER = 'social-postify';
 
+  /* eslint-disable prettier/prettier */
   constructor(
-    private readonly usersService: UsersService,
-    private readonly usersRepository: UsersRepository,
+    private readonly usersService: UserService,
+    private readonly usersRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) { }
+  /* eslint-enable prettier/prettier */
 
-  async signUp(body: AuthSignUpDTO) {
-    const user = await this.usersService.createUser(body);
+  async signUp(body: AuthSignUpDto) {
+    const user = await this.usersService.create(body);
     return this.createToken(user);
   }
 
-  async signIn({ email, password }: AuthSignInDTO) {
-    const user = await this.usersRepository.findUserByEmail(email);
-    if (!user)
-      throw new UnauthorizedException('Email or password are incorrect');
+  async signIn({ cpf, password }: AuthSignInDto) {
+    const user = await this.usersRepository.findUserByCPF(cpf);
+    if (!user) throw new UnauthorizedException('CPF or password are incorrect');
 
     const validPassword = bcrypt.compareSync(password, user.password);
     if (!validPassword)
-      throw new UnauthorizedException('Email or password are incorrect');
+      throw new UnauthorizedException('CPF or password are incorrect');
 
     return this.createToken(user);
   }
@@ -45,7 +42,7 @@ export class AuthService {
     const token = this.jwtService.sign(
       {
         name: user.name,
-        email: user.email,
+        cpf: user.cpf,
         avatar: user.avatar,
       },
       {
