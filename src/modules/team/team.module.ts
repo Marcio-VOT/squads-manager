@@ -16,5 +16,4 @@ import { PrismaTeamRepository } from './repository/implementations/prismaTeam.re
     { provide: TeamService, useClass: PrismaTeamRepository },
   ],
 })
-//eslint-disable-next-line
-export class TeamModule { }
+export class TeamModule {}

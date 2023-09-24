@@ -1,16 +1,16 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { AuthService } from '../auth.service';
 import { PrismaService } from 'src/database/prisma.service';
+import { AuthAdminService } from '../authAdmin.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthAdminGuard implements CanActivate {
   /**
    * Constructor of AuthGuard class.
    * @param authService - Instance of AuthService.
    * @param prisma - Instance of PrismaService.
    */
   constructor(
-    private readonly authService: AuthService,
+    private readonly authService: AuthAdminService,
     private readonly prisma: PrismaService,
   ) {}
   /**

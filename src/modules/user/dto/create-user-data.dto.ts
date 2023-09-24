@@ -2,8 +2,9 @@ import { OmitType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 import { IsNotEmpty, IsString, Length } from 'class-validator';
 
-// eslint-disable-next-line prettier/prettier
-export class CreateUserDataDto extends OmitType(CreateUserDto, ["team_id" as const]) {
+export class CreateUserDataDto extends OmitType(CreateUserDto, [
+  'team_id' as const,
+]) {
   @IsString()
   @IsNotEmpty()
   @Length(1, 80)

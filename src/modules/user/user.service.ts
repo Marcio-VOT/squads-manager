@@ -1,19 +1,21 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { UserRepository } from './repository/user.repository';
 import * as bcrypt from 'bcrypt';
-import { TeamRepository } from '../team/repository/team.repository';
 import { CreateUserDataDto } from './dto/create-user-data.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { TeamRepository } from '../team/repository/team.repository';
 
 @Injectable()
 export class UserService {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private readonly userRepository: UserRepository, private readonly teamRepository: TeamRepository) { }
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly teamRepository: TeamRepository,
+  ) {}
   async create(data: CreateUserDataDto) {
     const hashedPassword = bcrypt.hashSync(data.password, 10);
     const user = await this.userRepository.findUserByCPF(data.cpf);
     if (user) throw new ConflictException('User already exists');
-
+    console.log(data);
     const team = await this.teamRepository.findTeamByName(data.team);
     let team_id: number = team?.id ?? undefined;
     if (!team) {
@@ -22,7 +24,7 @@ export class UserService {
       });
       team_id = createdTeam.id;
     }
-
+    delete data.team;
     const userCreated = await this.userRepository.createUser({
       ...data,
       password: hashedPassword,

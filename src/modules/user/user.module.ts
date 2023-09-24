@@ -6,6 +6,7 @@ import { UserRepository } from './repository/user.repository';
 import { AuthModule } from '../auth/auth.module';
 import { TeamService } from '../team/team.service';
 import { TeamRepository } from '../team/repository/team.repository';
+import { PrismaTeamRepository } from '../team/repository/implementations/prismaTeam.repository';
 
 @Module({
   imports: [AuthModule],
@@ -14,12 +15,11 @@ import { TeamRepository } from '../team/repository/team.repository';
     UserService,
     { provide: UserRepository, useClass: PrismaUserRepository },
     TeamService,
-    { provide: TeamRepository, useClass: PrismaUserRepository },
+    { provide: TeamRepository, useClass: PrismaTeamRepository },
   ],
-  exports: [
-    UserService,
-    { provide: UserRepository, useClass: PrismaUserRepository },
-  ],
+  // exports: [
+  //   UserService,
+  //   { provide: UserRepository, useClass: PrismaUserRepository },
+  // ],
 })
-// eslint-disable-next-line
-export class UserModule { }
+export class UserModule {}

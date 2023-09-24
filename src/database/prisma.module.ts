@@ -6,6 +6,4 @@ import { PrismaService } from './prisma.service';
   providers: [PrismaService],
   exports: [PrismaService],
 })
-
-//eslint-disable-next-line
-export class PrismaModule { }
+export class PrismaModule {}

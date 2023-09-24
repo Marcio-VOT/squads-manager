@@ -4,8 +4,7 @@ import { PrismaService } from 'src/database/prisma.service';
 
 @Injectable()
 export class PrismaTeamRepository implements TeamRepository {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createTeam(data: any) {
     return await this.prisma.team.create({

@@ -6,8 +6,7 @@ import { UpdateUserDto } from '../../dto/update-user.dto';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createUser(data: CreateUserDto) {
     return await this.prisma.user.create({

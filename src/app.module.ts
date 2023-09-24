@@ -10,17 +10,16 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
+    PrismaModule,
     UserModule,
     AreaModule,
     MethodModule,
     ProcessModule,
     SubprocessModule,
     TeamModule,
-    PrismaModule,
     AuthModule,
   ],
   controllers: [],
   providers: [],
 })
-// eslint-disable-next-line prettier/prettier
-export class AppModule { }
+export class AppModule {}
