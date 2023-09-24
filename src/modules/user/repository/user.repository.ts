@@ -10,5 +10,5 @@ export abstract class UserRepository {
   abstract findUserById(id: number): Promise<User>;
   abstract findAllUsers(): Promise<User[]>;
   abstract deleteUser(id: number): Promise<void>;
-  abstract updateUser(data: UpdateUserDto): Promise<User>;
+  abstract updateUser(data: UpdateUserDto, id: number): Promise<User>;
 }

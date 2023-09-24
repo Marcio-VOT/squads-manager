@@ -1,26 +1,32 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from './repository/user.repository';
 import * as bcrypt from 'bcrypt';
+import { TeamRepository } from '../team/repository/team.repository';
+import { CreateUserDataDto } from './dto/create-user-data.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
   // eslint-disable-next-line prettier/prettier
-  constructor(private readonly userRepository: UserRepository) { }
-  async create(data: CreateUserDto) {
+  constructor(private readonly userRepository: UserRepository, private readonly teamRepository: TeamRepository) { }
+  async create(data: CreateUserDataDto) {
+    const hashedPassword = bcrypt.hashSync(data.password, 10);
     const user = await this.userRepository.findUserByCPF(data.cpf);
     if (user) throw new ConflictException('User already exists');
 
-    const hashedPassword = bcrypt.hashSync(data.password, 10);
-    // const team = await this.teamRepository.findTeamByName(data.team);
-    // if (!team) {
-    //   throw new Error('Team does not exists');
-    // }
+    const team = await this.teamRepository.findTeamByName(data.team);
+    let team_id: number = team?.id ?? undefined;
+    if (!team) {
+      const createdTeam = await this.teamRepository.createTeam({
+        name: data.team,
+      });
+      team_id = createdTeam.id;
+    }
+
     const userCreated = await this.userRepository.createUser({
       ...data,
       password: hashedPassword,
-      // team_id: team.id ?? 0,
-      team_id: 0,
+      team_id,
     });
     return userCreated;
   }
@@ -33,11 +39,11 @@ export class UserService {
     return await this.userRepository.findUserById(id);
   }
 
-  // async update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.userRepository.updateUser(updateUserDto, id);
+  }
 
-  // async remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  async remove(id: number) {
+    return await this.userRepository.deleteUser(id);
+  }
 }
