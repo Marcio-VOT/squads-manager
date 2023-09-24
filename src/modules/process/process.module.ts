@@ -4,6 +4,9 @@ import { ProcessController } from './process.controller';
 import { PrismaProcessRepository } from './repository/implementations/prismaProcess.repository';
 import { AuthModule } from '../auth/auth.module';
 import { ProcessRepository } from './repository/process.repository';
+import { AreaService } from '../area/area.service';
+import { AreaRepository } from '../area/repository/area.repository';
+import { PrismaAreaRepository } from '../area/repository/implementations/prismaArea.repository';
 
 @Module({
   imports: [AuthModule],
@@ -11,6 +14,8 @@ import { ProcessRepository } from './repository/process.repository';
   providers: [
     ProcessService,
     { provide: ProcessRepository, useClass: PrismaProcessRepository },
+    AreaService,
+    { provide: AreaRepository, useClass: PrismaAreaRepository },
   ],
 })
 export class ProcessModule {}

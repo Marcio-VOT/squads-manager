@@ -6,13 +6,25 @@ import {
 import { CreateProcessDto } from './dto/create-process.dto';
 import { UpdateProcessDto } from './dto/update-process.dto';
 import { ProcessRepository } from './repository/process.repository';
+import { AreaRepository } from '../area/repository/area.repository';
 
 @Injectable()
 export class ProcessService {
-  constructor(private readonly processRepository: ProcessRepository) {}
+  constructor(
+    private readonly processRepository: ProcessRepository,
+    private readonly areaRepository: AreaRepository,
+  ) {}
+
   async create(data: CreateProcessDto) {
-    const process = await this.processRepository.findProcessByName(data.name);
+    const process = await this.processRepository.findProcessByNameAndAreaId(
+      data.name,
+      data.area_id,
+    );
     if (process) throw new ConflictException('Process already exists');
+
+    const area = await this.areaRepository.findAreaById(data.area_id);
+    if (!area) throw new NotFoundException('Area not found');
+
     return await this.processRepository.createProcess(data);
   }
 

@@ -12,5 +12,9 @@ import { PrismaAreaRepository } from './repository/implementations/prismaArea.re
     AreaService,
     { provide: AreaRepository, useClass: PrismaAreaRepository },
   ],
+  exports: [
+    AreaService,
+    { provide: AreaRepository, useClass: PrismaAreaRepository },
+  ],
 })
 export class AreaModule {}

@@ -40,13 +40,15 @@ model Area {
 
 model Process {
   id         Int          @id @default(autoincrement())
-  name       String       @unique @db.VarChar(80)
+  name       String       @db.VarChar(80)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   Area       Area         @relation(fields: [area_id], references: [id])
   area_id    Int
   SubProcess SubProcess[]
   Stack      Stack[]
+
+  @@unique([name, area_id])
 }
 
 model SubProcess {
