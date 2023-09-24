@@ -55,7 +55,7 @@ model SubProcess {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(80)
   description String?
-  order       Int      @default(0)
+  order       Int      @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   Process     Process  @relation(fields: [process_id], references: [id])
@@ -65,6 +65,7 @@ model SubProcess {
   team_id     Int
 
   @@unique([name, team_id])
+  @@unique([order, process_id, team_id])
 }
 
 model Method {

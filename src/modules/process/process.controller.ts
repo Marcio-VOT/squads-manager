@@ -34,7 +34,7 @@ export class ProcessController {
   @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.processService.findOne(+id);
+    return await this.processService.findOne(id);
   }
 
   @UseGuards(AuthAdminGuard)
@@ -43,12 +43,12 @@ export class ProcessController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProcessDto: UpdateProcessDto,
   ) {
-    return await this.processService.update(+id, updateProcessDto);
+    return await this.processService.update(id, updateProcessDto);
   }
 
   @UseGuards(AuthAdminGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.processService.remove(+id);
+    return await this.processService.remove(id);
   }
 }
