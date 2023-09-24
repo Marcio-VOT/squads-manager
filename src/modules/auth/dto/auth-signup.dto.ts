@@ -1,4 +1,4 @@
-import { CreateUserDto } from 'src/modules/user/dto/create-user.dto'
+import { CreateUserDataDto } from 'src/modules/user/dto/create-user-data.dto';
 
 // eslint-disable-next-line prettier/prettier
-export class AuthSignUpDto extends CreateUserDto { }
+export class AuthSignUpDto extends CreateUserDataDto { }

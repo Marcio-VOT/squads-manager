@@ -1,17 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDataDto } from './dto/create-user-data.dto';
+import { AuthGuard } from '../auth/authGuard/auth.guard';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  //eslint-disable-next-line
+  constructor(private readonly userService: UserService) { }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDataDto) {
     return this.userService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();
