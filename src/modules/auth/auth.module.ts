@@ -25,6 +25,6 @@ import { PrismaTeamRepository } from '../team/repository/implementations/prismaT
     TeamService,
     { provide: TeamRepository, useClass: PrismaTeamRepository },
   ],
-  exports: [AuthService, AuthAdminService, UserService],
+  exports: [AuthService, AuthAdminService],
 })
 export class AuthModule {}

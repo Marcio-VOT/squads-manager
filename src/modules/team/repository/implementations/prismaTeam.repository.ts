@@ -41,7 +41,10 @@ export class PrismaTeamRepository implements TeamRepository {
   async updateTeam(data: any) {
     return await this.prisma.team.update({
       where: { id: data.id },
-      data,
+      data: {
+        ...data,
+        updatedAt: new Date(),
+      },
     });
   }
 }

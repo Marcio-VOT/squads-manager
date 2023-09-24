@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { CreateProcessDto } from './create-process.dto';
 
-export class UpdateProcessDto extends PartialType(CreateProcessDto) {}
+export class UpdateProcessDto extends OmitType(PartialType(CreateProcessDto), [
+  'area_id',
+]) {}

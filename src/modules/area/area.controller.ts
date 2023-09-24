@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { AreaService } from './area.service';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
+import { AuthGuard } from '../auth/authGuard/auth.guard';
+import { AuthAdminGuard } from '../auth/authGuard/authAdmin.guard';
 
 @Controller('area')
 export class AreaController {
   constructor(private readonly areaService: AreaService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createAreaDto: CreateAreaDto) {
-    return this.areaService.create(createAreaDto);
+  async create(@Body() createAreaDto: CreateAreaDto) {
+    return await this.areaService.create(createAreaDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.areaService.findAll();
+  async findAll() {
+    return await this.areaService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.areaService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.areaService.findOne(id);
   }
 
+  @UseGuards(AuthAdminGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAreaDto: UpdateAreaDto) {
-    return this.areaService.update(+id, updateAreaDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateAreaDto: UpdateAreaDto,
+  ) {
+    return await this.areaService.update(id, updateAreaDto);
   }
 
+  @UseGuards(AuthAdminGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.areaService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.areaService.remove(id);
   }
 }
