@@ -15,6 +15,7 @@ import { UpdateStackDto } from './dto/update-stack.dto';
 import { AuthGuard } from '../auth/authGuard/auth.guard';
 import { UserRequest } from '../auth/decorators/user.decorator';
 import { User } from '@prisma/client';
+import { AuthAdminGuard } from '../auth/authGuard/authAdmin.guard';
 
 @Controller('stack')
 export class StackController {
@@ -41,7 +42,7 @@ export class StackController {
     return await this.stackService.findOne(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthAdminGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -50,7 +51,7 @@ export class StackController {
     return await this.stackService.update(id, updateStackDto);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthAdminGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.stackService.remove(id);
