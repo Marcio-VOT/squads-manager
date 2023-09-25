@@ -8,7 +8,7 @@ import { PrismaService } from 'src/database/prisma.service';
 export class PrismaStackRepository implements StackRepository {
   constructor(private readonly prisma: PrismaService) {}
   async createStack(data: CreateStackDto): Promise<Stack> {
-    return await this.prisma.stack.create({ data });
+    return await this.prisma.stack.create({ data: { name: data.name } });
   }
 
   async getStacks(): Promise<Stack[]> {

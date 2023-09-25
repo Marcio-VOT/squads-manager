@@ -42,7 +42,9 @@ export class StackService {
         'This method does not belong to the given process',
       );
 
-    const stack = await this.stackRepository.createStack(data);
+    let stack = await this.stackRepository.getStackByName(data.name);
+
+    if (!stack) stack = await this.stackRepository.createStack(data);
 
     await this.stackRepository.linkStackToMethodAndProcess(
       stack.id,
