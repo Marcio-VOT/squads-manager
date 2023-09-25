@@ -1,34 +1,58 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { StackService } from './stack.service';
 import { CreateStackDto } from './dto/create-stack.dto';
 import { UpdateStackDto } from './dto/update-stack.dto';
+import { AuthGuard } from '../auth/authGuard/auth.guard';
+import { UserRequest } from '../auth/decorators/user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('stack')
 export class StackController {
   constructor(private readonly stackService: StackService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createStackDto: CreateStackDto) {
-    return this.stackService.create(createStackDto);
+  async create(
+    @Body() createStackDto: CreateStackDto,
+    @UserRequest() user: User,
+  ) {
+    return await this.stackService.create(createStackDto, user);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.stackService.findAll();
+  async findAll() {
+    return await this.stackService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.stackService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.stackService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStackDto: UpdateStackDto) {
-    return this.stackService.update(+id, updateStackDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateStackDto: UpdateStackDto,
+  ) {
+    return await this.stackService.update(id, updateStackDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stackService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.stackService.remove(id);
   }
 }

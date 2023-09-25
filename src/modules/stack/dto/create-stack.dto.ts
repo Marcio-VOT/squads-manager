@@ -1,6 +1,18 @@
+import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+
 export class CreateStackDto {
+  @IsNotEmpty()
+  @IsString()
+  @Length(3, 80)
   name: string;
+
+  @IsNotEmpty()
+  @IsNumber()
   method_id: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  process_id: number;
 }
 
 // model Stack {

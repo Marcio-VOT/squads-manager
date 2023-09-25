@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { StackRepository } from '../stack.repository';
-import { PrismaClient, Stack } from '@prisma/client';
+import { Stack } from '@prisma/client';
 import { CreateStackDto } from '../../dto/create-stack.dto';
+import { PrismaService } from 'src/database/prisma.service';
 
 @Injectable()
 export class PrismaStackRepository implements StackRepository {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaService) {}
   async createStack(data: CreateStackDto): Promise<Stack> {
     return await this.prisma.stack.create({ data });
   }
