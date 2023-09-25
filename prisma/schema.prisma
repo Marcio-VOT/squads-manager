@@ -77,11 +77,13 @@ model Method {
   SubProcess    SubProcess @relation(fields: [subProcess_id], references: [id])
   subProcess_id Int
   Stack         Stack[]
+
+  @@unique([name, subProcess_id])
 }
 
 model Stack {
   id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(80)
+  name      String    @unique @db.VarChar(80)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Method    Method[]

@@ -7,6 +7,7 @@ import { SubprocessModule } from './modules/subprocess/subprocess.module';
 import { TeamModule } from './modules/team/team.module';
 import { PrismaModule } from './database/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { StackModule } from './modules/stack/stack.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './modules/auth/auth.module';
     SubprocessModule,
     TeamModule,
     AuthModule,
+    StackModule,
   ],
   controllers: [],
   providers: [],
