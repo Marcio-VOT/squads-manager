@@ -21,6 +21,16 @@ export class PrismaSubprocessRepository implements SubprocessRepository {
     });
   }
 
+  async getSubprocessByNameTeamIdAndProcessId(
+    name: string,
+    team_id: number,
+    process_id: number,
+  ): Promise<SubProcess> {
+    return await this.prisma.subProcess.findUnique({
+      where: { name_team_id_process_id: { name, team_id, process_id } },
+    });
+  }
+
   async createSubprocess(
     subprocess: CreateSubprocessDto,
     user: User,

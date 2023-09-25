@@ -17,5 +17,9 @@ import { PrismaAreaRepository } from '../area/repository/implementations/prismaA
     AreaService,
     { provide: AreaRepository, useClass: PrismaAreaRepository },
   ],
+  exports: [
+    ProcessService,
+    { provide: ProcessRepository, useClass: PrismaProcessRepository },
+  ],
 })
 export class ProcessModule {}

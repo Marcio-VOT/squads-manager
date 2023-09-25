@@ -1,34 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { SubprocessService } from './subprocess.service';
 import { CreateSubprocessDto } from './dto/create-subprocess.dto';
 import { UpdateSubprocessDto } from './dto/update-subprocess.dto';
+import { AuthGuard } from '../auth/authGuard/auth.guard';
+import { AuthAdminGuard } from '../auth/authGuard/authAdmin.guard';
+import { UserRequest } from '../auth/decorators/user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('subprocess')
 export class SubprocessController {
   constructor(private readonly subprocessService: SubprocessService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createSubprocessDto: CreateSubprocessDto) {
-    return this.subprocessService.create(createSubprocessDto);
+  async create(
+    @Body() createSubprocessDto: CreateSubprocessDto,
+    @UserRequest() user: User,
+  ) {
+    return await this.subprocessService.create(createSubprocessDto, user);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.subprocessService.findAll();
+  async findAll() {
+    return await this.subprocessService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subprocessService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.subprocessService.findOne(id);
   }
 
+  @UseGuards(AuthAdminGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubprocessDto: UpdateSubprocessDto) {
-    return this.subprocessService.update(+id, updateSubprocessDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSubprocessDto: UpdateSubprocessDto,
+  ) {
+    return await this.subprocessService.update(id, updateSubprocessDto);
   }
 
+  @UseGuards(AuthAdminGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subprocessService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.subprocessService.remove(id);
   }
 }

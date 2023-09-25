@@ -24,8 +24,9 @@ export class ProcessService {
 
     const area = await this.areaRepository.findAreaById(data.area_id);
     if (!area) throw new NotFoundException('Area not found');
-
-    return await this.processRepository.createProcess(data);
+    const processCreated = await this.processRepository.createProcess(data);
+    await this.areaRepository.linkProcessToArea(area.id, processCreated.id);
+    return processCreated;
   }
 
   async findAll() {

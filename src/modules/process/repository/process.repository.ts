@@ -21,4 +21,8 @@ export abstract class ProcessRepository {
     id: number,
   ): Promise<ReturnProcess>;
   abstract deleteProcess(id: number): Promise<Process>;
+  abstract linkSubprocessToProcess(
+    subprocess_id: number,
+    process_id: number,
+  ): Promise<void>;
 }

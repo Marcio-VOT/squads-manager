@@ -22,6 +22,12 @@ export class AreaService {
     return this.areaRepository.findAllAreas();
   }
 
+  async findAreaAndAllDataById() {
+    const data = await this.areaRepository.findAreaAndAllDataById();
+    if (!data) throw new NotFoundException('Area not found');
+    return data;
+  }
+
   async findOne(id: number) {
     const area = await this.areaRepository.findAreaById(id);
     if (!area) throw new NotFoundException('Area not found');

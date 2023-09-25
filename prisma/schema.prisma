@@ -64,7 +64,7 @@ model SubProcess {
   Team        Team     @relation(fields: [team_id], references: [id])
   team_id     Int
 
-  @@unique([name, team_id])
+  @@unique([name, team_id, process_id])
   @@unique([order, process_id, team_id])
 }
 

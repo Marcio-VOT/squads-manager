@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AreaRepository } from '../area.repository';
+import { AreaRepository, AreaWithAllData } from '../area.repository';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateAreaDto } from '../../dto/create-area.dto';
 import { UpdateAreaDto } from '../../dto/update-area.dto';
@@ -14,6 +14,53 @@ export class PrismaAreaRepository implements AreaRepository {
       select: {
         id: true,
         name: true,
+      },
+    });
+  }
+
+  async findAreaAndAllDataById(): Promise<AreaWithAllData[]> {
+    return await this.prisma.area.findMany({
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            Process: true,
+          },
+        },
+
+        Process: {
+          select: {
+            _count: {
+              select: {
+                Stack: true,
+                SubProcess: true,
+              },
+            },
+            id: true,
+            name: true,
+            Stack: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            SubProcess: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                team_id: true,
+
+                _count: {
+                  select: {
+                    Method: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }

@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreateSubprocessDto {
   @IsNotEmpty()
@@ -6,6 +12,7 @@ export class CreateSubprocessDto {
   @Length(1, 80)
   name: string;
 
+  @IsOptional()
   @IsString()
   description?: string;
 

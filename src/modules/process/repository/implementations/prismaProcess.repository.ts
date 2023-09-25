@@ -59,4 +59,20 @@ export class PrismaProcessRepository implements ProcessRepository {
       where: { id },
     });
   }
+
+  async linkSubprocessToProcess(
+    subprocess_id: number,
+    process_id: number,
+  ): Promise<void> {
+    await this.prisma.process.update({
+      where: { id: process_id },
+      data: {
+        SubProcess: {
+          connect: {
+            id: subprocess_id,
+          },
+        },
+      },
+    });
+  }
 }

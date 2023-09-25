@@ -32,6 +32,12 @@ export class AreaController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('alldata')
+  async findAreaAndAllDataById() {
+    return await this.areaService.findAreaAndAllDataById();
+  }
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.areaService.findOne(id);
