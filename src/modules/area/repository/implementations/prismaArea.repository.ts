@@ -51,6 +51,11 @@ export class PrismaAreaRepository implements AreaRepository {
                 name: true,
                 description: true,
                 team_id: true,
+                Team: {
+                  select: {
+                    name: true,
+                  },
+                },
 
                 _count: {
                   select: {

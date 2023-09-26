@@ -27,6 +27,13 @@ export class AuthGuard implements CanActivate {
       const data = this.authService.checkToken(token);
       const user = await this.prisma.user.findFirst({
         where: { id: +data.sub },
+        include: {
+          team: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
 
       request.user = user;

@@ -33,7 +33,7 @@ export class AuthService {
    */
   async signUp(body: AuthSignUpDto): Promise<{ token: string }> {
     const user = await this.usersService.create(body);
-    return this.createToken(user);
+    return { ...this.createToken(user), ...user };
   }
 
   /**
@@ -50,7 +50,7 @@ export class AuthService {
     if (!validPassword)
       throw new UnauthorizedException('CPF or password are incorrect');
 
-    return this.createToken(user);
+    return { ...this.createToken(user), ...user };
   }
 
   /**

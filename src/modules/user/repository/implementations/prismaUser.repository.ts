@@ -16,6 +16,11 @@ export class PrismaUserRepository implements UserRepository {
         name: true,
         cpf: true,
         team_id: true,
+        team: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
   }
@@ -23,6 +28,13 @@ export class PrismaUserRepository implements UserRepository {
   async findUserByCPF(cpf: string) {
     return await this.prisma.user.findUnique({
       where: { cpf },
+      include: {
+        team: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 
