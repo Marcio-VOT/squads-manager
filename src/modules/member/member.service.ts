@@ -2,15 +2,25 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { MemberRepository } from './repository/member.repository';
+import { SquadRepository } from '../squad/repository/squad.repository';
 
 @Injectable()
 export class MemberService {
-  constructor(private readonly memberRepository: MemberRepository) {}
+  constructor(
+    private readonly memberRepository: MemberRepository,
+    private readonly squadRepository: SquadRepository,
+  ) {}
 
   async create(data: CreateMemberDto) {
+    const squad = await this.squadRepository.findSquadById(
+      data.current_squad_id,
+    );
+    if (!squad) {
+      throw new NotFoundException('Squad not found');
+    }
+
     return await this.memberRepository.createMember(data);
   }
-  // rever
 
   async findOne(member_id: number) {
     const member = await this.memberRepository.findMemberById(member_id);
