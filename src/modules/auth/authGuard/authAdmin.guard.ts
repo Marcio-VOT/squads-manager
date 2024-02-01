@@ -4,20 +4,10 @@ import { AuthAdminService } from '../authAdmin.service';
 
 @Injectable()
 export class AuthAdminGuard implements CanActivate {
-  /**
-   * Constructor of AuthGuard class.
-   * @param authService - Instance of AuthService.
-   * @param prisma - Instance of PrismaService.
-   */
   constructor(
     private readonly authService: AuthAdminService,
     private readonly prisma: PrismaService,
   ) {}
-  /**
-   * Method that determines if a user is authorized to access a certain route.
-   * @param context - ExecutionContext object.
-   * @returns A boolean indicating if the user is authorized to access the route.
-   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;

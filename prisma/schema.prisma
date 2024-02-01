@@ -2,90 +2,80 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  cpf       String   @unique
-  name      String   @db.VarChar(120)
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  team      Team     @relation(fields: [team_id], references: [id])
-  team_id   Int
+model Product {
+    product_id       Int             @id @default(autoincrement())
+    priority         Int
+    item_description String          @db.VarChar(255)
+    Squad            Squad[]
+    SprintBacklog    SprintBacklog[]
 }
 
-model Team {
-  id         Int          @id @default(autoincrement())
-  name       String       @unique @db.VarChar(80)
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  User       User[]
-  SubProcess SubProcess[]
+model Squad {
+    squad_id         Int               @id @default(autoincrement())
+    name             String            @db.VarChar(255)
+    leader_id        Int?
+    product_id       Int
+    sprint_duration  Int
+    trello_url       String            @db.VarChar(255)
+    product_owner_id Int?
+    scrum_master_id  Int?
+    SquadMember      SquadMember[]
+    SquadMembership  SquadMembership[]
+    Sprint           Sprint[]
+    Product          Product           @relation(fields: [product_id], references: [product_id])
 }
 
-model Area {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique @db.VarChar(80)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Process   Process[]
+model SquadMember {
+    member_id        Int               @id @default(autoincrement())
+    current_squad_id Int?
+    name             String            @db.VarChar(255)
+    position         String            @db.VarChar(255)
+    email            String            @db.VarChar(255)
+    discord          String?           @db.VarChar(60)
+    Squad            Squad?            @relation(fields: [current_squad_id], references: [squad_id], onDelete: Cascade)
+    SquadMembership  SquadMembership[]
 }
 
-model Process {
-  id         Int          @id @default(autoincrement())
-  name       String       @db.VarChar(80)
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Area       Area         @relation(fields: [area_id], references: [id])
-  area_id    Int
-  SubProcess SubProcess[]
-  Stack      Stack[]
-
-  @@unique([name, area_id])
+model SquadMembership {
+    membership_id Int         @id @default(autoincrement())
+    squad_id      Int
+    member_id     Int
+    start_date    DateTime
+    end_date      DateTime?
+    Squad         Squad       @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
+    SquadMember   SquadMember @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
 }
 
-model SubProcess {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(80)
-  description String?
-  order       Int      @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Process     Process  @relation(fields: [process_id], references: [id])
-  process_id  Int
-  Method      Method[]
-  Team        Team     @relation(fields: [team_id], references: [id])
-  team_id     Int
-
-  @@unique([name, team_id, process_id])
-  @@unique([order, process_id, team_id])
+model Sprint {
+    sprint_id     Int             @id @default(autoincrement())
+    squad_id      Int
+    start_date    DateTime
+    end_date      DateTime?
+    sprint_goal   String          @db.VarChar(255)
+    status        String          @db.VarChar(255)
+    SprintBacklog SprintBacklog[]
+    Squad         Squad           @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
 }
 
-model Method {
-  id            Int        @id @default(autoincrement())
-  name          String     @db.VarChar(80)
-  description   String?    @db.VarChar(300)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  SubProcess    SubProcess @relation(fields: [subProcess_id], references: [id])
-  subProcess_id Int
-  Stack         Stack[]
-
-  @@unique([name, subProcess_id])
+enum Status {
+    ENDED
+    IN_PROGRESS
 }
 
-model Stack {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique @db.VarChar(80)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Method    Method[]
-  Process   Process[]
+model SprintBacklog {
+    sprint_backlog_id Int     @id @default(autoincrement())
+    sprint_id         Int
+    product_item_id   Int
+    task_description  String  @db.VarChar(255)
+    status            Status
+    Sprint            Sprint  @relation(fields: [sprint_id], references: [sprint_id], onDelete: Cascade)
+    Product           Product @relation(fields: [product_item_id], references: [product_id], onDelete: Cascade)
 }
