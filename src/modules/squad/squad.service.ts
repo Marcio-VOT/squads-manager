@@ -21,7 +21,6 @@ export class SquadService {
     );
     return await this.squadRepository.createSquad(data);
   }
-  // rever
 
   async findAll() {
     return await this.squadRepository.findAllSquads();
