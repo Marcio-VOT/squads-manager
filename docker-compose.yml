@@ -11,15 +11,13 @@ services:
 
   node:
     container_name: node
+    depends_on:
+      - postgres
     build: .
     ports:
       - 5000:5000
-    depends_on:
-      - postgres
     env_file:
-      - .env
-    environment:
-      - POSTGRES_HOST=postgres
-
+      - docker.env
+    
 volumes:
   postgres-volume:

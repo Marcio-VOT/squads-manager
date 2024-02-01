@@ -16,8 +16,5 @@ RUN npm i
 # faz a compilação do TS para JS
 RUN npm run build
 
-#faz o seed do banco de dados
-RUN npx prisma db seed
-
 # só roda quando darmos docker run
-CMD ["npm", "start"]
+CMD [ "npm", "start"]

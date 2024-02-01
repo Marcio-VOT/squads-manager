@@ -21,12 +21,15 @@ model Product {
 model Squad {
   squad_id         Int               @id @default(autoincrement())
   name             String            @db.VarChar(255)
-  leader_id        Int?
+  leader_id        Int?              @unique()
   product_id       Int
   sprint_duration  Int
   trello_url       String            @db.VarChar(255)
-  product_owner_id Int?
-  scrum_master_id  Int?
+  product_owner_id Int?              @unique()
+  scrum_master_id  Int?              @unique()
+  leader           SquadMember?      @relation("leader", fields: [leader_id], references: [member_id], onDelete: SetNull)
+  product_owner    SquadMember?      @relation("product_owner", fields: [product_owner_id], references: [member_id], onDelete: SetNull)
+  scrum_master     SquadMember?      @relation("scrum_master", fields: [scrum_master_id], references: [member_id], onDelete: SetNull)
   SquadMember      SquadMember[]
   SquadMembership  SquadMembership[]
   Sprint           Sprint[]
@@ -40,17 +43,20 @@ model SquadMember {
   position         String            @db.VarChar(255)
   email            String            @db.VarChar(255)
   discord          String?           @db.VarChar(60)
-  Squad            Squad?            @relation(fields: [current_squad_id], references: [squad_id], onDelete: Cascade)
+  Squad            Squad?            @relation(fields: [current_squad_id], references: [squad_id], onDelete: SetNull)
   SquadMembership  SquadMembership[]
+  leader           Squad[]           @relation("leader")
+  product_owner    Squad[]           @relation("product_owner")
+  scrum_master     Squad[]           @relation("scrum_master")
 }
 
 model SquadMembership {
   membership_id Int         @id @default(autoincrement())
-  squad_id      Int
+  squad_id      Int?
   member_id     Int
   start_date    DateTime
   end_date      DateTime?
-  Squad         Squad       @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
+  Squad         Squad?      @relation(fields: [squad_id], references: [squad_id], onDelete: SetNull)
   SquadMember   SquadMember @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
 }
 
@@ -71,11 +77,11 @@ enum Status {
 }
 
 model SprintBacklog {
-  sprint_backlog_id Int     @id @default(autoincrement())
-  sprint_id         Int
-  product_item_id   Int
-  task_description  String  @db.VarChar(255)
+  sprint_backlog_id Int      @id @default(autoincrement())
+  sprint_id         Int?
+  product_item_id   Int?
+  task_description  String   @db.VarChar(255)
   status            Status
-  Sprint            Sprint  @relation(fields: [sprint_id], references: [sprint_id], onDelete: Cascade)
-  Product           Product @relation(fields: [product_item_id], references: [product_id], onDelete: Cascade)
+  Sprint            Sprint?  @relation(fields: [sprint_id], references: [sprint_id], onDelete: SetNull)
+  Product           Product? @relation(fields: [product_item_id], references: [product_id], onDelete: SetNull)
 }
