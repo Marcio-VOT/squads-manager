@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import {
   UserRepository,
   ReturnCreateUser,
-} from '../user/repository/user.repository';
-import { UserService } from '../user/user.service';
+} from '../product/repository/product.repository';
+import { UserService } from '../product/product.service';
 import { AuthSignInDto } from './dto/auth-signin.dto';
 import { AuthSignUpDto } from './dto/auth-signup.dto';
 import * as bcrypt from 'bcrypt';

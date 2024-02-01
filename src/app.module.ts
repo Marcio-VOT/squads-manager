@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './database/prisma.module';
+import { ProductModule } from './modules/product/product.module';
 // import { UserModule } from './modules/user/user.module';
 // import { AreaModule } from './modules/area/area.module';
 // import { MethodModule } from './modules/method/method.module';
@@ -10,7 +11,7 @@ import { PrismaModule } from './database/prisma.module';
 // import { StackModule } from './modules/stack/stack.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, ProductModule],
   controllers: [],
   providers: [],
 })
