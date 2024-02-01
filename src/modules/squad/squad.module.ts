@@ -11,4 +11,4 @@ import { SquadService } from './squad.service';
     { provide: SquadRepository, useClass: PrismaSquadRepository },
   ],
 })
-export class ProductModule {}
+export class SquadModule {}

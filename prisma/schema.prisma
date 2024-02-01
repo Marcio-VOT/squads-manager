@@ -21,12 +21,12 @@ model Product {
 model Squad {
   squad_id         Int               @id @default(autoincrement())
   name             String            @db.VarChar(255)
-  leader_id        Int?              @unique()
+  leader_id        Int?
   product_id       Int
   sprint_duration  Int
   trello_url       String            @db.VarChar(255)
-  product_owner_id Int?              @unique()
-  scrum_master_id  Int?              @unique()
+  product_owner_id Int?
+  scrum_master_id  Int?
   leader           SquadMember?      @relation("leader", fields: [leader_id], references: [member_id], onDelete: SetNull)
   product_owner    SquadMember?      @relation("product_owner", fields: [product_owner_id], references: [member_id], onDelete: SetNull)
   scrum_master     SquadMember?      @relation("scrum_master", fields: [scrum_master_id], references: [member_id], onDelete: SetNull)
