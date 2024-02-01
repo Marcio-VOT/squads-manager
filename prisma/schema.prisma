@@ -2,80 +2,80 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Product {
-    product_id       Int             @id @default(autoincrement())
-    priority         Int
-    item_description String          @db.VarChar(255)
-    Squad            Squad[]
-    SprintBacklog    SprintBacklog[]
+  product_id       Int             @id @default(autoincrement())
+  priority         Int
+  item_description String          @db.VarChar(255)
+  Squad            Squad[]
+  SprintBacklog    SprintBacklog[]
 }
 
 model Squad {
-    squad_id         Int               @id @default(autoincrement())
-    name             String            @db.VarChar(255)
-    leader_id        Int?
-    product_id       Int
-    sprint_duration  Int
-    trello_url       String            @db.VarChar(255)
-    product_owner_id Int?
-    scrum_master_id  Int?
-    SquadMember      SquadMember[]
-    SquadMembership  SquadMembership[]
-    Sprint           Sprint[]
-    Product          Product           @relation(fields: [product_id], references: [product_id])
+  squad_id         Int               @id @default(autoincrement())
+  name             String            @db.VarChar(255)
+  leader_id        Int?
+  product_id       Int
+  sprint_duration  Int
+  trello_url       String            @db.VarChar(255)
+  product_owner_id Int?
+  scrum_master_id  Int?
+  SquadMember      SquadMember[]
+  SquadMembership  SquadMembership[]
+  Sprint           Sprint[]
+  Product          Product           @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
 }
 
 model SquadMember {
-    member_id        Int               @id @default(autoincrement())
-    current_squad_id Int?
-    name             String            @db.VarChar(255)
-    position         String            @db.VarChar(255)
-    email            String            @db.VarChar(255)
-    discord          String?           @db.VarChar(60)
-    Squad            Squad?            @relation(fields: [current_squad_id], references: [squad_id], onDelete: Cascade)
-    SquadMembership  SquadMembership[]
+  member_id        Int               @id @default(autoincrement())
+  current_squad_id Int?
+  name             String            @db.VarChar(255)
+  position         String            @db.VarChar(255)
+  email            String            @db.VarChar(255)
+  discord          String?           @db.VarChar(60)
+  Squad            Squad?            @relation(fields: [current_squad_id], references: [squad_id], onDelete: Cascade)
+  SquadMembership  SquadMembership[]
 }
 
 model SquadMembership {
-    membership_id Int         @id @default(autoincrement())
-    squad_id      Int
-    member_id     Int
-    start_date    DateTime
-    end_date      DateTime?
-    Squad         Squad       @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
-    SquadMember   SquadMember @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  membership_id Int         @id @default(autoincrement())
+  squad_id      Int
+  member_id     Int
+  start_date    DateTime
+  end_date      DateTime?
+  Squad         Squad       @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
+  SquadMember   SquadMember @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
 }
 
 model Sprint {
-    sprint_id     Int             @id @default(autoincrement())
-    squad_id      Int
-    start_date    DateTime
-    end_date      DateTime?
-    sprint_goal   String          @db.VarChar(255)
-    status        String          @db.VarChar(255)
-    SprintBacklog SprintBacklog[]
-    Squad         Squad           @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
+  sprint_id     Int             @id @default(autoincrement())
+  squad_id      Int
+  start_date    DateTime
+  end_date      DateTime?
+  sprint_goal   String          @db.VarChar(255)
+  status        String          @db.VarChar(255)
+  SprintBacklog SprintBacklog[]
+  Squad         Squad           @relation(fields: [squad_id], references: [squad_id], onDelete: Cascade)
 }
 
 enum Status {
-    ENDED
-    IN_PROGRESS
+  ENDED
+  IN_PROGRESS
 }
 
 model SprintBacklog {
-    sprint_backlog_id Int     @id @default(autoincrement())
-    sprint_id         Int
-    product_item_id   Int
-    task_description  String  @db.VarChar(255)
-    status            Status
-    Sprint            Sprint  @relation(fields: [sprint_id], references: [sprint_id], onDelete: Cascade)
-    Product           Product @relation(fields: [product_item_id], references: [product_id], onDelete: Cascade)
+  sprint_backlog_id Int     @id @default(autoincrement())
+  sprint_id         Int
+  product_item_id   Int
+  task_description  String  @db.VarChar(255)
+  status            Status
+  Sprint            Sprint  @relation(fields: [sprint_id], references: [sprint_id], onDelete: Cascade)
+  Product           Product @relation(fields: [product_item_id], references: [product_id], onDelete: Cascade)
 }

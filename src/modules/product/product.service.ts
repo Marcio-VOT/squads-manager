@@ -36,6 +36,6 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException('Product not found');
     }
-    return product;
+    return await this.productRepository.deleteProduct(id);
   }
 }

@@ -21,7 +21,11 @@ export class PrismaProductRepository implements ProductRepository {
   }
 
   async findAllProducts() {
-    return await this.prisma.product.findMany();
+    return await this.prisma.product.findMany({
+      orderBy: {
+        product_id: 'asc',
+      },
+    });
   }
 
   async deleteProduct(product_id: number) {
