@@ -12,7 +12,7 @@ import { CreateSquadDto } from './dto/create-squad.dto';
 import { UpdateSquadDto } from './dto/update-squad.dto';
 import { SquadService } from './squad.service';
 
-@Controller('squad')
+@Controller('todo')
 export class SquadController {
   constructor(private readonly squadService: SquadService) {}
 
@@ -24,11 +24,6 @@ export class SquadController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.squadService.findOne(id);
-  }
-
-  @Get('product/:id')
-  findaLLSquadsByProductId(@Param('id', ParseIntPipe) id: number) {
-    return this.squadService.findaLLSquadsByProductId(id);
   }
 
   @Post()

@@ -1,47 +1,23 @@
 import {
-  IsInt,
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
-  IsPositive,
   IsString,
-  IsUrl,
   Length,
 } from 'class-validator';
 
 export class CreateSquadDto {
   @IsNotEmpty()
   @IsString()
-  @Length(3, 255)
-  name: string;
-
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  leader_id: number;
-
-  @IsNotEmpty()
-  @IsInt()
-  @IsPositive()
-  product_id: number;
-
-  @IsNotEmpty()
-  @IsInt()
-  @IsPositive()
-  sprint_duration: number;
+  @Length(3, 50)
+  title: string;
 
   @IsNotEmpty()
   @IsString()
-  @IsUrl()
-  @Length(0, 255)
-  trello_url: string;
+  @Length(3, 255)
+  description: string;
 
   @IsOptional()
-  @IsInt()
-  @IsPositive()
-  product_owner_id: number;
-
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  scrum_master_id: number;
+  @IsBoolean()
+  done: boolean;
 }

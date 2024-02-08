@@ -9,41 +9,37 @@ export class PrismaSquadRepository implements SquadRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async createSquad(data: CreateSquadDto) {
-    return await this.prisma.squad.create({
+    return await this.prisma.todo.create({
       data,
     });
   }
 
-  async findSquadById(squad_id: number) {
-    return await this.prisma.squad.findUnique({
-      where: { squad_id },
+  async findSquadById(todo_id: number) {
+    return await this.prisma.todo.findUnique({
+      where: { todo_id, deleted_at: null },
     });
   }
 
   async findAllSquads() {
-    return await this.prisma.squad.findMany({
+    return await this.prisma.todo.findMany({
+      where: { deleted_at: null },
       orderBy: {
-        product_id: 'asc',
+        todo_id: 'asc',
       },
     });
   }
 
-  async findaLLSquadsByProductId(product_id: number) {
-    return await this.prisma.squad.findMany({
-      where: { product_id },
+  async deleteSquad(todo_id: number) {
+    await this.prisma.todo.update({
+      where: { todo_id },
+      data: { deleted_at: new Date() },
     });
   }
 
-  async deleteSquad(squad_id: number) {
-    await this.prisma.squad.delete({
-      where: { squad_id },
-    });
-  }
-
-  async updateSquad(data: UpdateSquadDto, squad_id: number) {
-    return await this.prisma.squad.update({
-      where: { squad_id },
-      data,
+  async updateSquad(data: UpdateSquadDto, todo_id: number) {
+    return await this.prisma.todo.update({
+      where: { todo_id },
+      data: { ...data },
     });
   }
 }
