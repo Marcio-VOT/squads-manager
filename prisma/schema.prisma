@@ -85,13 +85,3 @@ model SprintBacklog {
   Sprint            Sprint?  @relation(fields: [sprint_id], references: [sprint_id], onDelete: SetNull)
   Product           Product? @relation(fields: [product_item_id], references: [product_id], onDelete: SetNull)
 }
-
-model Todo {
-  todo_id     Int       @id @default(autoincrement())
-  title       String
-  description String
-  done        Boolean   @default(false)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
-}
